@@ -154,18 +154,22 @@ public class NaiveAgent implements Runnable {
 				{
 				    Point _tpt = null;
 				    
+				 // random pick up a pig
+                    ABObject pig = pigs.get(randomGenerator.nextInt(pigs.size()));
+                    
 				    for(Rectangle woodPiece : woods){
-				        System.out.println("Found wood: " + woodPiece.getCenterX()  + "\t " + woodPiece.getCenterY());
-				    
+				        System.out.println("Found wood: " + woodPiece.getCenterX()  + "\t " + 
+				    woodPiece.getCenterY() + "\t" + distance(pig.getCenter(), new Point((int)woodPiece.getCenterX(), (int)woodPiece.getCenterY())));
 				        
 				    }
-					// random pick up a pig
-					ABObject pig = pigs.get(randomGenerator.nextInt(pigs.size()));
+					
+					//random pick up a wood
 					Rectangle woodPiece = woods.get(randomGenerator.nextInt(woods.size()));
 					
-					_tpt =  new Point((int)woodPiece.getCenterX(), (int)woodPiece.getCenterY());
+					_tpt = getVulnerablePoint(pig, woods);
+	                   //overriding point object
+					
 					// _tpt = pig.getCenter();// if the target is very close to before, randomly choose a
-					//overriding point object
 					
 					
 					
@@ -276,7 +280,29 @@ public class NaiveAgent implements Runnable {
 		return state;
 	}
 
-	public static void main(String args[]) {
+	private Point getVulnerablePoint(ABObject pig, List<Rectangle> woodPieces)
+    {
+	    Point likelyPoint = null;
+	    Point returnPoint = null;
+	    double maxDist = Double.MAX_VALUE;
+	    
+	    for( Rectangle  woodPiece: woodPieces){
+	        
+	        likelyPoint = new Point((int)woodPiece.getCenterX(), (int)woodPiece.getCenterY());
+	        
+	        if(distance(likelyPoint, pig.getCenter()) < maxDist){ 
+	            maxDist = distance(likelyPoint, pig.getCenter());	            
+	            returnPoint = new Point((int)woodPiece.getCenterX(), (int)woodPiece.getCenterY());
+	        }
+	    }
+	    
+	    System.out.println("Pig at = " + pig.getCenter());
+	    System.out.println("hitting wood at = " + returnPoint.getX() + ", " + returnPoint.getY());
+       return returnPoint;
+    }
+
+
+    public static void main(String args[]) {
 
 		NaiveAgent na = new NaiveAgent();
 		if (args.length > 0)
