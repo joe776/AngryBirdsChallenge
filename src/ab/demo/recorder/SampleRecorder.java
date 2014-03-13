@@ -8,6 +8,9 @@ import java.io.IOException;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
+/**
+ * Helps to write game samples to a CSV file.
+ */
 public class SampleRecorder implements AutoCloseable {
 
 	private static final String[] MAPPING = { "id", "level", "shot", "angle", "velocity", "impact", "addedScore",
@@ -87,6 +90,10 @@ public class SampleRecorder implements AutoCloseable {
 
 		public long getId() {
 			return id;
+		}
+
+		public int getLevel() {
+			return level;
 		}
 
 		public int getShot() {
